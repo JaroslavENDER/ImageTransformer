@@ -4,7 +4,7 @@ namespace Kontur.ImageTransformer.Transformer
 {
     public static class Transformer
     {
-        public static Bitmap Transform(Bitmap image, FilterType type, int x, int y, int width, int height, int param = 0)
+        public static Img Transform(Img image, FilterType type, int x, int y, int width, int height, int param = 0)
         {
             switch (type)
             {

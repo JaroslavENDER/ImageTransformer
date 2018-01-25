@@ -4,13 +4,13 @@ namespace Kontur.ImageTransformer.Transformer
 {
     internal static class SnippingTool
     {
-        public static Bitmap Cut(Bitmap image, int x, int y, int width, int height)
+        public static Img Cut(Img image, int x, int y, int width, int height)
         {
             NormalizeCoords(image.Size, ref x, ref y, ref width, ref height);
-            var newImage = new Bitmap(width, height);
+            var newImage = new Img(width, height);
             for (var X = 0; X < width; x++, X++)
                 for (int Y = 0, tempY = y; Y < height; tempY++, Y++)
-                    newImage.SetPixel(X, Y, image.GetPixel(x, tempY));
+                    newImage[X, Y] = image[x, tempY];
 
             return newImage;
         }

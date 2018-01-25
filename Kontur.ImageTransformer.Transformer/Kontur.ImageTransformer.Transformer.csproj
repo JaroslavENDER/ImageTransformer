@@ -45,6 +45,7 @@
     <Compile Include="Filter.cs" />
     <Compile Include="FilterType.cs" />
     <Compile Include="Img.cs" />
+    <Compile Include="ImgConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnippingTool.cs" />
     <Compile Include="Transformer.cs" />

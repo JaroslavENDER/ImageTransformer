@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 
 namespace Kontur.ImageTransformer.Transformer.StressTest
 {
@@ -8,26 +9,31 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
     {
         static void Main(string[] args)
         {
-            var outWatch = new Stopwatch();
-            var innerWatch = new Stopwatch();
-            outWatch.Start();
             for (var a = 0; a < 4; a++)
             {
-                innerWatch.Restart();
                 SampleTest();
-                innerWatch.Stop();
-                Console.WriteLine(innerWatch.Elapsed.TotalSeconds);
             }
-            outWatch.Stop();
-            Console.WriteLine("Total: " + outWatch.Elapsed.TotalSeconds);
             Console.ReadLine();
         }
 
         private static void SampleTest()
         {
-            var image = new Bitmap("TestImage.jpg");
-            image = Filter.SetGrayscale(image);
-            image.Save("ResultTestImage.jpg");
+            var watch = new Stopwatch();
+
+            watch.Restart();
+            var bitmap = new Bitmap("TestImage.png");
+            var image = ImgConverter.ConvertFromBitmap(bitmap);
+            ImgConverter.ConvertToBitmap(image).Save("ResultTestImage.png");
+            Console.WriteLine(watch.Elapsed.TotalSeconds);
+
+            watch.Restart();
+            var bytes = File.ReadAllBytes("TestImage.png");
+            var image2 = ImgConverter.ConvertFromBytes(bytes);
+            image2 = Filter.SetGrayscale(image2);
+            ImgConverter.ConvertToBitmap(image2).Save("ResultTestImage.png");
+            Console.WriteLine(watch.Elapsed.TotalSeconds);
+
+            Console.WriteLine(new string('-', 50));
         }
     }
 }
