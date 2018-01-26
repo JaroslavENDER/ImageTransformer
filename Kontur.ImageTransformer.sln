@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Tra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Transformer.StressTest", "Kontur.ImageTransformer.Transformer.StressTest\Kontur.ImageTransformer.Transformer.StressTest.csproj", "{705B4652-B677-40ED-939A-FC851076612B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Server", "Kontur.ImageTransformer.Server\Kontur.ImageTransformer.Server.csproj", "{32BBEFF3-25AF-4B70-8B90-5A13BA067D43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Server.StressTest", "Kontur.ImageTransformer.Server.StressTest\Kontur.ImageTransformer.Server.StressTest.csproj", "{60956696-2415-460D-B14B-6F4D4DBD2444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{705B4652-B677-40ED-939A-FC851076612B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{705B4652-B677-40ED-939A-FC851076612B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{705B4652-B677-40ED-939A-FC851076612B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32BBEFF3-25AF-4B70-8B90-5A13BA067D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BBEFF3-25AF-4B70-8B90-5A13BA067D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BBEFF3-25AF-4B70-8B90-5A13BA067D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BBEFF3-25AF-4B70-8B90-5A13BA067D43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60956696-2415-460D-B14B-6F4D4DBD2444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60956696-2415-460D-B14B-6F4D4DBD2444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60956696-2415-460D-B14B-6F4D4DBD2444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60956696-2415-460D-B14B-6F4D4DBD2444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
