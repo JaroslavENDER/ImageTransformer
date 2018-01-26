@@ -16,7 +16,7 @@ namespace Kontur.ImageTransformer.Server
         {
             var stream = context.Request.InputStream;
             var image = ImgConverter.ConvertFromStream(stream);
-            image = Transformer.Transformer.Transform(image, FilterType.Sepia, 0, 0, 2000, 2000);
+            image = Transformer.Transformer.Transform(image, FilterType.Grayscale, 0, 0, 2000, 2000);
             ImgConverter.ConvertToBitmap(image).Save(context.Response.OutputStream, ImageFormat.Png);
             context.Response.OutputStream.Close();
         }
