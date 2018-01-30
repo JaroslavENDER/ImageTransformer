@@ -24,12 +24,32 @@ namespace Kontur.ImageTransformer.Transformer
             return ConvertFromBitmap(bitmap);
         }
 
-        public static Img ConvertFromBitmap(Bitmap bitmap)
+        public static unsafe Img ConvertFromBitmap(Bitmap bitmap)
         {
-            var image = new Img(bitmap.Width, bitmap.Height);
-            for (var y = 0; y < bitmap.Height; y++)
-                for (var x = 0; x < bitmap.Width; x++)
-                    image[x, y] = bitmap.GetPixel(x, y);
+            int width = bitmap.Width;
+            int height = bitmap.Height;
+            var image = new Img(width, height);
+            int R, G, B;
+            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            try
+            {
+                byte* curpos;
+                for (int h = 0; h < height; h++)
+                {
+                    curpos = ((byte*)bitmapData.Scan0) + h * bitmapData.Stride;
+                    for (int w = 0; w < width; w++)
+                    {
+                        B = *(curpos++);
+                        G = *(curpos++);
+                        R = *(curpos++);
+                        image[w, h] = Color.FromArgb(R, G, B);
+                    }
+                }
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
             return image;
         }
 
@@ -44,13 +64,32 @@ namespace Kontur.ImageTransformer.Transformer
             return bytes;
         }
 
-        public static Bitmap ConvertToBitmap(Img image)
+        public static unsafe Bitmap ConvertToBitmap(Img image)
         {
-            var bitmap = new Bitmap(image.Size.Width, image.Size.Height);
-            for (var y = 0; y < bitmap.Height; y++)
-                for (var x = 0; x < bitmap.Width; x++)
-                    bitmap.SetPixel(x, y, image[x, y]);
-            return bitmap;
+            var width = image.Size.Width;
+            var height = image.Size.Height;
+            Bitmap result = new Bitmap(width, height, PixelFormat.Format24bppRgb);
+            BitmapData bd = result.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            try
+            {
+                byte* curpos;
+                for (int h = 0; h < height; h++)
+                {
+                    curpos = ((byte*)bd.Scan0) + h * bd.Stride;
+                    for (int w = 0; w < width; w++)
+                    {
+                        *(curpos++) = image[w, h].B;
+                        *(curpos++) = image[w, h].G;
+                        *(curpos++) = image[w, h].R;
+                    }
+                }
+            }
+            finally
+            {
+                result.UnlockBits(bd);
+            }
+
+            return result;
         }
     }
 }
