@@ -8,23 +8,24 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
     {
         static void Main(string[] args)
         {
-            var watch = new Stopwatch();
-            for (var a = 0; a < 40; a++)
-            {
-                SampleTest(watch);
-            }
+            watch = new Stopwatch();
+            var percentilCounter = new Ender.PercentilCounter<double>(80);
+            foreach (var value in percentilCounter.RunTestAndGetResult(SampleTest, 40))
+                Console.WriteLine(value);
+
             Console.ReadLine();
         }
 
-        private static void SampleTest(Stopwatch watch)
+        private static Stopwatch watch;
+        private static double SampleTest()
         {
             watch.Restart();
             var image = ImgConverter.ConvertFromStream(File.OpenRead("TestImage.png"));
             image = Filter.SetGrayscale(image);
             File.WriteAllBytes("ResultTestImage.png", ImgConverter.ConvertToBytes(image));
-            Console.WriteLine(watch.Elapsed.TotalSeconds);
-
-            Console.WriteLine(new string('-', 50));
+            var time = watch.Elapsed.TotalSeconds;
+            Console.Write(time + "\t");
+            return time;
         }
     }
 }

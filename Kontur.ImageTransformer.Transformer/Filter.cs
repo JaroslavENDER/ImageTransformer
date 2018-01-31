@@ -2,7 +2,7 @@
 
 namespace Kontur.ImageTransformer.Transformer
 {
-    internal static class Filter
+    public static class Filter
     {
         public static Img SetGrayscale(Img image)
         {

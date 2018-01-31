@@ -1,7 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
 
 namespace Kontur.ImageTransformer.Transformer
 {
+    [Obsolete("Use Fiter and SnippingTool", error: false)]
     public static class Transformer
     {
         public static Img Transform(Img image, FilterType type, int x, int y, int width, int height, int param = 0)
