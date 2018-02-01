@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 
 namespace Kontur.ImageTransformer.Transformer.StressTest
@@ -9,31 +8,24 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
     {
         static void Main(string[] args)
         {
-            for (var a = 0; a < 4; a++)
-            {
-                SampleTest();
-            }
+            watch = new Stopwatch();
+            var percentilCounter = new Ender.PercentilCounter<double>(80);
+            foreach (var value in percentilCounter.RunTestAndGetResult(SampleTest, 40))
+                Console.WriteLine(value);
+
             Console.ReadLine();
         }
 
-        private static void SampleTest()
+        private static Stopwatch watch;
+        private static double SampleTest()
         {
-            var watch = new Stopwatch();
-
             watch.Restart();
-            var bitmap = new Bitmap("TestImage.png");
-            var image = ImgConverter.ConvertFromBitmap(bitmap);
+            var image = ImgConverter.ConvertFromStream(File.OpenRead("TestImage.png"));
+            image = Filter.SetGrayscale(image);
             ImgConverter.ConvertToBitmap(image).Save("ResultTestImage.png");
-            Console.WriteLine(watch.Elapsed.TotalSeconds);
-
-            watch.Restart();
-            var bytes = File.ReadAllBytes("TestImage.png");
-            var image2 = ImgConverter.ConvertFromBytes(bytes);
-            image2 = Filter.SetGrayscale(image2);
-            ImgConverter.ConvertToBitmap(image2).Save("ResultTestImage.png");
-            Console.WriteLine(watch.Elapsed.TotalSeconds);
-
-            Console.WriteLine(new string('-', 50));
+            var time = watch.Elapsed.TotalSeconds;
+            Console.Write(time + "\t");
+            return time;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Kontur.ImageTransformer.Transformer
 {
-    internal static class SnippingTool
+    public static class SnippingTool
     {
         public static Img Cut(Img image, int x, int y, int width, int height)
         {
