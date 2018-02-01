@@ -22,7 +22,7 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
             watch.Restart();
             var image = ImgConverter.ConvertFromStream(File.OpenRead("TestImage.png"));
             image = Filter.SetGrayscale(image);
-            File.WriteAllBytes("ResultTestImage.png", ImgConverter.ConvertToBytes(image));
+            ImgConverter.ConvertToBitmap(image).Save("ResultTestImage.png");
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "\t");
             return time;

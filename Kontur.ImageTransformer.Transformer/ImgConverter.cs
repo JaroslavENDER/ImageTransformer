@@ -29,8 +29,8 @@ namespace Kontur.ImageTransformer.Transformer
             int width = bitmap.Width;
             int height = bitmap.Height;
             var image = new Img(width, height);
-            int R, G, B;
-            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            int A, R, G, B;
+            var bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             try
             {
                 byte* curpos;
@@ -42,7 +42,8 @@ namespace Kontur.ImageTransformer.Transformer
                         B = *(curpos++);
                         G = *(curpos++);
                         R = *(curpos++);
-                        image[w, h] = Color.FromArgb(R, G, B);
+                        A = *(curpos++);
+                        image[w, h] = Color.FromArgb(A, R, G, B);
                     }
                 }
             }
@@ -68,8 +69,8 @@ namespace Kontur.ImageTransformer.Transformer
         {
             var width = image.Size.Width;
             var height = image.Size.Height;
-            Bitmap result = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-            BitmapData bd = result.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            Bitmap result = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+            BitmapData bd = result.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
             try
             {
                 byte* curpos;
@@ -81,6 +82,7 @@ namespace Kontur.ImageTransformer.Transformer
                         *(curpos++) = image[w, h].B;
                         *(curpos++) = image[w, h].G;
                         *(curpos++) = image[w, h].R;
+                        *(curpos++) = image[w, h].A;
                     }
                 }
             }
