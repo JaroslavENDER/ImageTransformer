@@ -10,25 +10,17 @@ namespace Kontur.ImageTransformer.Server.StressTest
     {
         static void Main(string[] args)
         {
-            try
-            {
-                var watch = new Stopwatch();
-                for (var i = 0; i < 10; i++)
-                {
-                    watch.Restart();
-                    SampleTest();
-                    Console.WriteLine(watch.Elapsed.TotalSeconds);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            var percentilCounter = new Ender.PercentilCounter<double>(80);
+            foreach (var time in percentilCounter.RunTestAndGetResult(SampleTest, 40))
+                Console.WriteLine(time);
+
             Console.ReadLine();
         }
 
-        private static void SampleTest()
+        private static double SampleTest()
         {
+            var watch = new Stopwatch();
+            watch.Restart();
             var bytes = File.ReadAllBytes("TestImage.png");
             var request = WebRequest.Create("http://localhost:8080/") as HttpWebRequest;
             request.Method = "POST";
@@ -41,6 +33,10 @@ namespace Kontur.ImageTransformer.Server.StressTest
                 var result = ImgConverter.ConvertFromStream(responseStream);
                 ImgConverter.ConvertToBitmap(result).Save("ResultTestImage.png");
             }
+
+            var time = watch.Elapsed.TotalSeconds;
+            Console.Write(time + "\t");
+            return time;
         }
     }
 }
