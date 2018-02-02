@@ -1,5 +1,7 @@
 ﻿using Kontur.ImageTransformer.Transformer;
+using System;
 using System.Drawing.Imaging;
+using System.Net;
 
 namespace Kontur.ImageTransformer.Server
 {
@@ -7,18 +9,30 @@ namespace Kontur.ImageTransformer.Server
     {
         static void Main(string[] args)
         {
-            var server = new Ender.HttpServer("http://localhost:8080/");
-            server.ReceivedRequest += server_Handler;
-            server.Start();
+            var server = new AsyncHttpServer();
+            server.AddHandler(server_Handler);
+            server.StartAsync("http://localhost:8080/");
+
+            Console.ReadLine();
         }
 
-        private static void server_Handler(object sender, System.Net.HttpListenerContext context)
+        private static void server_Handler(HttpListenerContext context)
         {
-            var stream = context.Request.InputStream;
-            var image = ImgConverter.ConvertFromStream(stream);
-            image = Transformer.Transformer.Transform(image, FilterType.Grayscale, 0, 0, 2000, 2000);
-            ImgConverter.ConvertToBitmap(image).Save(context.Response.OutputStream, ImageFormat.Png);
-            context.Response.OutputStream.Close();
+            Console.WriteLine("Request: " + context.Request.QueryString);
+            var inputStream = context.Request.InputStream;
+            var outputStream = context.Response.OutputStream;
+
+            var result = HandleImage(ImgConverter.ConvertFromStream(inputStream), null);
+
+            context.Response.StatusCode = (int)HttpStatusCode.OK;
+            ImgConverter.ConvertToBitmap(result).Save(outputStream, ImageFormat.Png);
+            outputStream.Close();
+            Console.WriteLine("Response: " + context.Request.QueryString);
+        }
+
+        private static Img HandleImage(Img image, string queryString)
+        {
+            return Filter.SetThreshold(image, 50);
         }
     }
 }
