@@ -1,6 +1,7 @@
-﻿using Kontur.ImageTransformer.Transformer;
-using System;
+﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace Kontur.ImageTransformer.Server.StressTest
 
         static void Main(string[] args)
         {
-            MaxStressTest();
+            RPSTest();
 
             Console.ReadLine();
         }
@@ -28,7 +29,7 @@ namespace Kontur.ImageTransformer.Server.StressTest
 
         private static void RPSTest()
         {
-            var percentilCounter = new Ender.PercentilCounter<double>(80);
+            var percentilCounter = new Ender.PercentilCounter<double>(20);
             foreach (var rps in percentilCounter.RunTestAndGetResult(OneRPSTest, 40))
                 Console.WriteLine(rps);
         }
@@ -58,41 +59,37 @@ namespace Kontur.ImageTransformer.Server.StressTest
         private static void DoRequest(byte[] image)
         {
             var watch = new Stopwatch();
+
             var request = WebRequest.Create("http://localhost:8080");
             request.Method = "POST";
-            using (var stream = request.GetRequestStream())
-                stream.Write(image, 0, image.Length);
+            request.GetRequestStream().Write(image, 0, image.Length);
+
             watch.Restart();
             request.GetResponse();
-            Console.WriteLine(watch.Elapsed.TotalSeconds);
+            //Console.WriteLine(watch.Elapsed.TotalSeconds);
         }
 
         private static void SimpleLatencyTest()
         {
             var percentilCounter = new Ender.PercentilCounter<double>(80);
-            foreach (var time in percentilCounter.RunTestAndGetResult(SimpleTest, 40))
+            foreach (var time in percentilCounter.RunTestAndGetResult(SimpleTest, 1000))
                 Console.WriteLine(time);
         }
 
         private static double SimpleTest()
         {
             var watch = new Stopwatch();
-
-            var bytes = File.ReadAllBytes(testImage);
+            
             var request = WebRequest.Create("http://localhost:8080/process") as HttpWebRequest;
             request.Method = "POST";
-            using (var stream = request.GetRequestStream())
-            {
-                stream.Write(bytes, 0, bytes.Length);
-            }
+            Image.FromFile(testImage).Save(request.GetRequestStream(), ImageFormat.Png);
 
             watch.Restart();
             using (var responseStream = request.GetResponse().GetResponseStream())
             {
                 var time = watch.Elapsed.TotalSeconds;
                 Console.Write(time + "\t");
-                var result = ImgConverter.ConvertFromStream(responseStream);
-                ImgConverter.ConvertToBitmap(result).Save(resultTestImage);
+                Image.FromStream(responseStream).Save(resultTestImage, ImageFormat.Png);
                 return time;
             }
         }

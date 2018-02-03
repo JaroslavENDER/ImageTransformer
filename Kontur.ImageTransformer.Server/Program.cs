@@ -1,5 +1,6 @@
 ﻿using Kontur.ImageTransformer.Transformer;
 using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Net;
 
@@ -7,6 +8,8 @@ namespace Kontur.ImageTransformer.Server
 {
     class Program
     {
+        private static int counter = 0;
+
         static void Main(string[] args)
         {
             var server = new AsyncHttpServer();
@@ -18,21 +21,21 @@ namespace Kontur.ImageTransformer.Server
 
         private static void server_Handler(HttpListenerContext context)
         {
-            Console.WriteLine("Request: " + context.Request.QueryString);
             var inputStream = context.Request.InputStream;
             var outputStream = context.Response.OutputStream;
 
-            var result = HandleImage(ImgConverter.ConvertFromStream(inputStream), null);
+            var result = HandleImage(Image.FromStream(inputStream) as Bitmap, null);
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
-            ImgConverter.ConvertToBitmap(result).Save(outputStream, ImageFormat.Png);
+            result.Save(outputStream, ImageFormat.Png);
             outputStream.Close();
-            Console.WriteLine("Response: " + context.Request.QueryString);
+            Console.WriteLine("Response: " + counter++);
         }
 
-        private static Img HandleImage(Img image, string queryString)
+        private static Bitmap HandleImage(Bitmap image, string queryString)
         {
-            return Filter.SetThreshold(image, 50);
+            Filter.SetGrayscale(image);
+            return image;
         }
     }
 }
