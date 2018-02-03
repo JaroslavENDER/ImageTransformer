@@ -1,22 +1,10 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Kontur.ImageTransformer.Transformer
 {
     public static class Filter
     {
-        [Obsolete("Use SetGrayscale(Bitmap image)", error: false)]
-        public static Img SetGrayscale(Img image)
-        {
-            for (var x = 0; x < image.Size.Width; x++)
-                for (var y = 0; y < image.Size.Height; y++)
-                {
-                    var newIntensity = (image[x, y].R + image[x, y].G + image[x, y].B) / 3;
-                    image[x, y] = Color.FromArgb(image[x, y].A, newIntensity, newIntensity, newIntensity);
-                }
-            return image;
-        }
         public static unsafe void SetGrayscale(Bitmap image)
         {
             int width = image.Width;
@@ -49,20 +37,7 @@ namespace Kontur.ImageTransformer.Transformer
                 image.UnlockBits(imageData);
             }
         }
-
-        [Obsolete("Use SetThreshold(Bitmap image, int param)", error: false)]
-        public static Img SetThreshold(Img image, int param)
-        {
-            for (var x = 0; x < image.Size.Width; x++)
-                for (var y = 0; y < image.Size.Height; y++)
-                {
-                    var newIntensity = (image[x, y].R + image[x, y].G + image[x, y].B) / 3;
-                    image[x, y] = newIntensity >= 255 * param / 100
-                        ? Color.FromArgb(image[x, y].A, 255, 255, 255)
-                        : Color.FromArgb(image[x, y].A, 0, 0, 0);
-                }
-            return image;
-        }
+        
         public static unsafe void SetThreshold(Bitmap image, int param)
         {
             int width = image.Width;
@@ -97,24 +72,7 @@ namespace Kontur.ImageTransformer.Transformer
                 image.UnlockBits(imageData);
             }
         }
-
-        [Obsolete("Use SetSepia(Bitmap image)", error: false)]
-        public static Img SetSepia(Img image)
-        {
-            for (var x = 0; x < image.Size.Width; x++)
-                for (var y = 0; y < image.Size.Height; y++)
-                {
-                    int r = (int)(image[x, y].R * .393 + image[x, y].G * .769 + image[x, y].B * .189);
-                    int g = (int)(image[x, y].R * .349 + image[x, y].G * .686 + image[x, y].B * .168);
-                    int b = (int)(image[x, y].R * .272 + image[x, y].G * .534 + image[x, y].B * .131);
-                    image[x, y] = Color.FromArgb(
-                        image[x, y].A,
-                        r > 255 ? 255 : r,
-                        g > 255 ? 255 : g,
-                        b > 255 ? 255 : b);
-                }
-            return image;
-        }
+        
         public static unsafe void SetSepia(Bitmap image)
         {
             int width = image.Width;

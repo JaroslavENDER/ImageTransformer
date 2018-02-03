@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Kontur.ImageTransformer.Transformer
 {
@@ -9,19 +8,6 @@ namespace Kontur.ImageTransformer.Transformer
         {
             area = NormalizeCoords(image.Size, area);
             return image.Clone(area, image.PixelFormat);
-        }
-
-        [Obsolete("Use Cut(Bitmap image, ...)", error: false)]
-        public static Img Cut(Img image, int x, int y, int width, int height)
-        {
-            throw new NotImplementedException("Is Obsolete method");
-            //NormalizeCoords(image.Size, ref x, ref y, ref width, ref height);
-            var newImage = new Img(width, height);
-            for (var X = 0; X < width; x++, X++)
-                for (int Y = 0, tempY = y; Y < height; tempY++, Y++)
-                    newImage[X, Y] = image[x, tempY];
-
-            return newImage;
         }
 
         private static Rectangle NormalizeCoords(Size imageSize, Rectangle rect)
