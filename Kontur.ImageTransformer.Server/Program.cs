@@ -6,7 +6,7 @@ using System.Net;
 
 namespace Kontur.ImageTransformer.Server
 {
-    class Program
+    internal class Program
     {
         private static int counter = 0;
 
