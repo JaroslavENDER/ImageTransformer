@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Kontur.ImageTransformer.Server.StressTest
 {
-    internal class NewRPSTest : ITest
+    class LongStableLoad : ITest
     {
         private Ender.PercentilCounter<double> percentilCounter = new Ender.PercentilCounter<double>(20);
         private object block = new object();
         private int counter = 0;
-        private double requestPerSecondCount = 20;
-        private bool pause = false;
+        private double requestPerSecondCount = 30;
+        private int realyRequestPerSecondCount = 0;
 
         public double Invoke()
         {
@@ -21,12 +21,8 @@ namespace Kontur.ImageTransformer.Server.StressTest
             var counterTask = Task.Run(() => Counter());
             while (true)
             {
-                if (pause)
-                {
-                    Thread.Sleep(100);
-                    continue;
-                }
                 Task.Run(() => DoRequest(image));
+                Interlocked.Increment(ref realyRequestPerSecondCount);
                 Thread.Sleep((int)(1000 / requestPerSecondCount));
                 var a = counterTask.Status;
             }
@@ -39,21 +35,11 @@ namespace Kontur.ImageTransformer.Server.StressTest
             while (true)
             {
                 var latency = percentilCounter.GetPercentil();
-                Console.WriteLine(string.Format("Latency: {0:0.0000}; RPS: {1}; RequestCount: {2:0.0}", latency, counter - localCounter, requestPerSecondCount));
+                Console.WriteLine(string.Format("Latency: {0:0.0000}; RPS: {1}; RequestCount: {2} ({3:0.0})", latency, counter - localCounter, realyRequestPerSecondCount, requestPerSecondCount));
+                Interlocked.Exchange(ref realyRequestPerSecondCount, 0);
                 localCounter = counter;
                 percentilCounter.Restart();
-                if (latency > 1)
-                {
-                    requestPerSecondCount -= 1;
-                    pause = true;
-                    Thread.Sleep(5000);
-                    pause = false;
-                }
-                else
-                {
-                    requestPerSecondCount += 4;
-                    Thread.Sleep(999);
-                }
+                Thread.Sleep(999);
             }
         }
 
@@ -66,12 +52,17 @@ namespace Kontur.ImageTransformer.Server.StressTest
             request.GetRequestStream().Write(image, 0, image.Length);
 
             watch.Restart();
-            request.GetResponse();
-            lock (block)
+            var status = 0;
+            try { status = (int)(request.GetResponse() as HttpWebResponse).StatusCode; }
+            //catch (WebException ex) { Console.WriteLine(ex.Message.Split('(', ')')[1]); }
+            catch { }
+            if (status == 200)
             {
-                //Console.WriteLine(watch.Elapsed.TotalSeconds);
-                percentilCounter.Add(watch.Elapsed.TotalSeconds);
-                counter++;
+                lock (block)
+                {
+                    percentilCounter.Add(watch.Elapsed.TotalSeconds);
+                    counter++;
+                }
             }
         }
     }

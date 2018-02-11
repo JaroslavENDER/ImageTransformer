@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITest.cs" />
+    <Compile Include="LongStableLoad.cs" />
     <Compile Include="MaxStressTest.cs" />
     <Compile Include="NewRPSTest.cs" />
     <Compile Include="Program.cs" />
