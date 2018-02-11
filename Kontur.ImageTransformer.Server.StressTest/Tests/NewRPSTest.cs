@@ -61,8 +61,9 @@ namespace Kontur.ImageTransformer.Server.StressTest
         {
             var watch = new Stopwatch();
 
-            var request = WebRequest.Create("http://localhost:8080");
+            var request = WebRequest.Create("http://localhost:8080/process/grayscale/0,0,1999,1999");
             request.Method = "POST";
+            request.ContentLength = image.Length;
             request.GetRequestStream().Write(image, 0, image.Length);
 
             watch.Restart();

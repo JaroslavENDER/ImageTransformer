@@ -25,7 +25,7 @@ namespace Kontur.ImageTransformer.Server
             if (activeRequestsCount < maxActiveRequestsCount)
                 OkHanlder(context);
             else
-                SkipHandler(context);
+                SkipHandler(context, 429);
 
             Console.WriteLine(counter++ + "\tActive requests: " + activeRequestsCount);
         }
@@ -52,9 +52,9 @@ namespace Kontur.ImageTransformer.Server
             return image;
         }
 
-        private static void SkipHandler(HttpListenerContext context)
+        private static void SkipHandler(HttpListenerContext context, int statusCode)
         {
-            context.Response.StatusCode = 429;
+            context.Response.StatusCode = statusCode;
             context.Response.OutputStream.Close();
         }
     }
