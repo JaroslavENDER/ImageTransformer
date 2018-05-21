@@ -1,8 +1,10 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Kontur.ImageTransformer.Transformer
 {
+    [Obsolete("Use IFilter", error: false)] //Сделаем вид, что я не переименовывал проект ;) / version 3.0.0.0 -> 3.1.0.0
     public static class Filter
     {
         public static unsafe void SetGrayscale(Bitmap image)

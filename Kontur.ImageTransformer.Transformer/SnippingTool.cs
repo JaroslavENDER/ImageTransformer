@@ -1,10 +1,18 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Kontur.ImageTransformer.Transformer
 {
-    public static class SnippingTool
+    public class SnippingTool
     {
+        [Obsolete("Use new SnippingTool().Snip()", error: false)]
         public static Bitmap Cut(Bitmap image, Rectangle area)
+        {
+            area = NormalizeCoords(image.Size, area);
+            return image.Clone(area, image.PixelFormat);
+        }
+
+        public Bitmap Snip(Bitmap image, Rectangle area)
         {
             area = NormalizeCoords(image.Size, area);
             return image.Clone(area, image.PixelFormat);

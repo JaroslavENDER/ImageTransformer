@@ -44,6 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filter.cs" />
+    <Compile Include="Filters\Interfaces\IGrayscaleFilter.cs" />
+    <Compile Include="Filters\Interfaces\ISepiaFilter.cs" />
+    <Compile Include="Filters\Interfaces\IThresholdFilter.cs" />
+    <Compile Include="Filters\SepiaFilter.cs" />
+    <Compile Include="Filters\ThresholdFilter.cs" />
+    <Compile Include="Filters\GrayscaleFilter.cs" />
+    <Compile Include="Filters\Interfaces\IFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnippingTool.cs" />
   </ItemGroup>
