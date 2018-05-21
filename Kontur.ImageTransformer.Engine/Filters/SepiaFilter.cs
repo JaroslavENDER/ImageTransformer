@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Kontur.ImageTransformer.Transformer.Filters
+namespace Kontur.ImageTransformer.Engine.Filters
 {
     public class SepiaFilter : ISepiaFilter
     {

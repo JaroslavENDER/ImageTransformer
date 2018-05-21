@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Kontur.ImageTransformer.Transformer.Filters
+namespace Kontur.ImageTransformer.Engine.Filters
 {
     public interface IThresholdFilter : IFilter
     {

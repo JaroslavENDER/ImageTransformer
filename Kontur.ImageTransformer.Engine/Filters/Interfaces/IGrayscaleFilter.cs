@@ -1,4 +1,4 @@
-﻿namespace Kontur.ImageTransformer.Transformer.Filters
+﻿namespace Kontur.ImageTransformer.Engine.Filters
 {
     public interface IGrayscaleFilter : IFilter
     {

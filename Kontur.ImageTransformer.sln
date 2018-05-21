@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Transformer", "Kontur.ImageTransformer.Transformer\Kontur.ImageTransformer.Transformer.csproj", "{E863E1C0-1059-4C8F-B501-F46D6A352BB8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Engine", "Kontur.ImageTransformer.Engine\Kontur.ImageTransformer.Engine.csproj", "{E863E1C0-1059-4C8F-B501-F46D6A352BB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Transformer.StressTest", "Kontur.ImageTransformer.Transformer.StressTest\Kontur.ImageTransformer.Transformer.StressTest.csproj", "{705B4652-B677-40ED-939A-FC851076612B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kontur.ImageTransformer.Engine.StressTest", "Kontur.ImageTransformer.Engine.StressTest\Kontur.ImageTransformer.Engine.StressTest.csproj", "{705B4652-B677-40ED-939A-FC851076612B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Kontur.ImageTransformer.Transformer
+namespace Kontur.ImageTransformer.Engine
 {
     public class SnippingTool
     {

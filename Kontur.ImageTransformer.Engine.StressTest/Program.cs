@@ -1,4 +1,5 @@
-﻿using Kontur.ImageTransformer.Transformer.Filters;
+﻿using Kontur.ImageTransformer.Engine;
+using Kontur.ImageTransformer.Engine.Filters;
 using System;
 using System.Diagnostics;
 using System.Drawing;

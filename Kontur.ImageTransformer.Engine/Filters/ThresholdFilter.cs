@@ -1,11 +1,16 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Kontur.ImageTransformer.Transformer.Filters
+namespace Kontur.ImageTransformer.Engine.Filters
 {
-    public class GrayscaleFilter : IGrayscaleFilter
+    public class ThresholdFilter : IThresholdFilter
     {
-        public unsafe void Process(Bitmap image)
+        public void Process(Bitmap image)
+        {
+            Process(image, 80);
+        }
+
+        public unsafe void Process(Bitmap image, int param)
         {
             int width = image.Width;
             int height = image.Height;
@@ -15,19 +20,21 @@ namespace Kontur.ImageTransformer.Transformer.Filters
             try
             {
                 byte* curpos;
-                for (var h = 0; h < height; h++)
+                for (int h = 0; h < height; h++)
                 {
                     curpos = ((byte*)imageData.Scan0) + h * imageData.Stride;
-                    for (var w = 0; w < width; w++)
+                    for (int w = 0; w < width; w++)
                     {
                         B = *(curpos++);
                         G = *(curpos++);
                         R = *(curpos++);
-                        var middle = (byte)((R + G + B) / 3);
+                        var newValue = ((R + G + B) / 3) >= (255 * param / 100)
+                            ? (byte)255
+                            : (byte)0;
                         curpos -= 3;
-                        *(curpos++) = middle;
-                        *(curpos++) = middle;
-                        *(curpos++) = middle;
+                        *(curpos++) = newValue;
+                        *(curpos++) = newValue;
+                        *(curpos++) = newValue;
                         curpos++;
                     }
                 }
