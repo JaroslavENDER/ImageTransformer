@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Kontur.ImageTransformer.Engine;
+using Kontur.ImageTransformer.Engine.Filters;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -12,7 +14,7 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
         static void Main(string[] args)
         {
             var percentilCounter = new Ender.PercentilCounter<double>(80);
-            foreach (var value in percentilCounter.RunTestAndGetResult(SnippingToolTest, 1000))
+            foreach (var value in percentilCounter.RunTestAndGetResult(SampleTest, 1000))
                 Console.WriteLine(value);
 
             Console.ReadLine();
@@ -23,7 +25,7 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
             var watch = new Stopwatch();
             watch.Restart();
             var image = Image.FromFile(testImage) as Bitmap;
-            Filter.SetGrayscale(image);
+            new GrayscaleFilter().Process(image);
             image.Save(resultTestImage);
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "\t");
@@ -34,7 +36,7 @@ namespace Kontur.ImageTransformer.Transformer.StressTest
             var watch = new Stopwatch();
             var image = Image.FromFile(testImage) as Bitmap;
             watch.Restart();
-            image = SnippingTool.Cut(image, new Rectangle(10, 10, image.Width - 20, image.Height - 20));
+            image = new SnippingTool().Snip(image, new Rectangle(10, 10, image.Width - 20, image.Height - 20));
             var time = watch.Elapsed.TotalSeconds;
             Console.Write(time + "\t");
             return time;

@@ -65,7 +65,7 @@
       <Project>{32bbeff3-25af-4b70-8b90-5a13ba067d43}</Project>
       <Name>Kontur.ImageTransformer.Server</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Kontur.ImageTransformer.Transformer\Kontur.ImageTransformer.Transformer.csproj">
+    <ProjectReference Include="..\Kontur.ImageTransformer.Engine\Kontur.ImageTransformer.Engine.csproj">
       <Project>{e863e1c0-1059-4c8f-b501-f46d6a352bb8}</Project>
       <Name>Kontur.ImageTransformer.Transformer</Name>
     </ProjectReference>

@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{705B4652-B677-40ED-939A-FC851076612B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Kontur.ImageTransformer.Transformer.StressTest</RootNamespace>
-    <AssemblyName>Kontur.ImageTransformer.Transformer.StressTest</AssemblyName>
+    <ProjectGuid>{E863E1C0-1059-4C8F-B501-F46D6A352BB8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Kontur.ImageTransformer.Transformer</RootNamespace>
+    <AssemblyName>Kontur.ImageTransformer.Transformer</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,9 +21,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PercentilCounter">
-      <HintPath>References\PercentilCounter.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,17 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Filter.cs" />
+    <Compile Include="Filters\Interfaces\IGrayscaleFilter.cs" />
+    <Compile Include="Filters\Interfaces\ISepiaFilter.cs" />
+    <Compile Include="Filters\Interfaces\IThresholdFilter.cs" />
+    <Compile Include="Filters\SepiaFilter.cs" />
+    <Compile Include="Filters\ThresholdFilter.cs" />
+    <Compile Include="Filters\GrayscaleFilter.cs" />
+    <Compile Include="Filters\Interfaces\IFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Kontur.ImageTransformer.Transformer\Kontur.ImageTransformer.Transformer.csproj">
-      <Project>{e863e1c0-1059-4c8f-b501-f46d6a352bb8}</Project>
-      <Name>Kontur.ImageTransformer.Transformer</Name>
-    </ProjectReference>
+    <Compile Include="SnippingTool.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
