@@ -15,9 +15,12 @@ namespace Kontur.ImageTransformer.Server
 
         static void Main(string[] args)
         {
-            var server = new HttpServer();
-            server.AddHandler(server_Handler);
-            server.Start("http://localhost:8080/");
+            using (var server = new HttpServer())
+            {
+                server.RegisterHandler(server_Handler);
+                server.StartAsync("http://localhost:8080/");
+                Console.ReadLine();
+            }
         }
 
         private static void server_Handler(HttpListenerContext context)
@@ -37,7 +40,7 @@ namespace Kontur.ImageTransformer.Server
             var inputStream = context.Request.InputStream;
             var outputStream = context.Response.OutputStream;
 
-            var result = HandleImage(Image.FromStream(inputStream) as Bitmap, null);
+            var result = HandleImage(Image.FromStream(inputStream) as Bitmap, context.Request.RawUrl);
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
             result.Save(outputStream, ImageFormat.Png);
@@ -46,7 +49,7 @@ namespace Kontur.ImageTransformer.Server
             Interlocked.Decrement(ref activeRequestsCount);
         }
 
-        private static Bitmap HandleImage(Bitmap image, string queryString)
+        private static Bitmap HandleImage(Bitmap image, string rawUrl)
         {
             Filter.SetGrayscale(image);
             return image;
