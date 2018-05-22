@@ -1,4 +1,5 @@
 ﻿using Kontur.ImageTransformer.Engine;
+using Kontur.ImageTransformer.Engine.Filters;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -28,7 +29,7 @@ namespace Kontur.ImageTransformer.Server
             if (activeRequestsCount < maxActiveRequestsCount)
                 OkHanlder(context);
             else
-                SkipHandler(context, 429);
+                SkipHandler(context, (int)HttpStatusCode.Forbidden);
 
             Console.WriteLine(counter++ + "\tActive requests: " + activeRequestsCount);
         }
@@ -36,22 +37,30 @@ namespace Kontur.ImageTransformer.Server
         private static void OkHanlder(HttpListenerContext context)
         {
             Interlocked.Increment(ref activeRequestsCount);
-
             var inputStream = context.Request.InputStream;
             var outputStream = context.Response.OutputStream;
+            try
+            {
+                var result = HandleImage(Image.FromStream(inputStream) as Bitmap, context.Request.RawUrl);
 
-            var result = HandleImage(Image.FromStream(inputStream) as Bitmap, context.Request.RawUrl);
-
-            context.Response.StatusCode = (int)HttpStatusCode.OK;
-            result.Save(outputStream, ImageFormat.Png);
-            outputStream.Close();
-
-            Interlocked.Decrement(ref activeRequestsCount);
+                context.Response.StatusCode = (int)HttpStatusCode.OK;
+                result.Save(outputStream, ImageFormat.Png);
+            }
+            catch(Exception ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                outputStream.Close();
+                Interlocked.Decrement(ref activeRequestsCount);
+            }
         }
 
         private static Bitmap HandleImage(Bitmap image, string rawUrl)
         {
-            Filter.SetGrayscale(image);
+            new GrayscaleFilter().Process(image);
             return image;
         }
 
