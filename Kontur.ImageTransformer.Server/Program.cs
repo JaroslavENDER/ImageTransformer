@@ -27,14 +27,14 @@ namespace Kontur.ImageTransformer.Server
         private static void server_Handler(HttpListenerContext context)
         {
             if (activeRequestsCount < maxActiveRequestsCount)
-                OkHanlder(context);
+                OkHanlder(context, SkipHandler);
             else
                 SkipHandler(context, (int)HttpStatusCode.Forbidden);
 
             Console.WriteLine(counter++ + "\tActive requests: " + activeRequestsCount);
         }
 
-        private static void OkHanlder(HttpListenerContext context)
+        private static void OkHanlder(HttpListenerContext context, Action<HttpListenerContext, int> skipHandler)
         {
             Interlocked.Increment(ref activeRequestsCount);
             var inputStream = context.Request.InputStream;
@@ -42,9 +42,14 @@ namespace Kontur.ImageTransformer.Server
             try
             {
                 var result = HandleImage(Image.FromStream(inputStream) as Bitmap, context.Request.RawUrl);
-
-                context.Response.StatusCode = (int)HttpStatusCode.OK;
-                result.Save(outputStream, ImageFormat.Png);
+                if (result == null)
+                    skipHandler(context, (int)HttpStatusCode.BadRequest);
+                else
+                {
+                    context.Response.ContentType = "image/png";
+                    context.Response.StatusCode = (int)HttpStatusCode.OK;
+                    result.Save(outputStream, ImageFormat.Png);
+                }
             }
             catch(Exception ex)
             {
@@ -60,8 +65,15 @@ namespace Kontur.ImageTransformer.Server
 
         private static Bitmap HandleImage(Bitmap image, string rawUrl)
         {
-            new GrayscaleFilter().Process(image);
-            return image;
+            if (rawUrl.StartsWith("/process/grayscale"))
+                return new GrayscaleFilter().Process(image);
+            if (rawUrl.StartsWith("/process/sepia"))
+                return new SepiaFilter().Process(image);
+            if (rawUrl.StartsWith("/process/threshold/"))
+                if (int.TryParse(rawUrl.Split('/')[3], out var param))
+                    return new ThresholdFilter().Process(image, param);
+
+            return null;
         }
 
         private static void SkipHandler(HttpListenerContext context, int statusCode)
