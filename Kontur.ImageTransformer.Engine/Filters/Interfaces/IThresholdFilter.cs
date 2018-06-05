@@ -4,6 +4,6 @@ namespace Kontur.ImageTransformer.Engine.Filters
 {
     public interface IThresholdFilter : IFilter
     {
-        void Process(Bitmap image, int param);
+        Bitmap Process(Bitmap image, int param);
     }
 }
