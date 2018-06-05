@@ -4,6 +4,6 @@ namespace Kontur.ImageTransformer.Engine.Filters
 {
     public interface IFilter
     {
-        void Process(Bitmap image);
+        Bitmap Process(Bitmap image);
     }
 }

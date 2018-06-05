@@ -5,12 +5,12 @@ namespace Kontur.ImageTransformer.Engine.Filters
 {
     public class ThresholdFilter : IThresholdFilter
     {
-        public void Process(Bitmap image)
+        public Bitmap Process(Bitmap image)
         {
-            Process(image, 80);
+            return Process(image, 80);
         }
 
-        public unsafe void Process(Bitmap image, int param)
+        public unsafe Bitmap Process(Bitmap image, int param)
         {
             int width = image.Width;
             int height = image.Height;
@@ -43,6 +43,7 @@ namespace Kontur.ImageTransformer.Engine.Filters
             {
                 image.UnlockBits(imageData);
             }
+            return image;
         }
     }
 }

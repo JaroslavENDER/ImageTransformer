@@ -5,7 +5,7 @@ namespace Kontur.ImageTransformer.Engine.Filters
 {
     public class SepiaFilter : ISepiaFilter
     {
-        public unsafe void Process(Bitmap image)
+        public unsafe Bitmap Process(Bitmap image)
         {
             int width = image.Width;
             int height = image.Height;
@@ -39,6 +39,7 @@ namespace Kontur.ImageTransformer.Engine.Filters
             {
                 image.UnlockBits(imageData);
             }
+            return image;
         }
     }
 }
